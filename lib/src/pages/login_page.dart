@@ -54,7 +54,7 @@ class LoginPage extends StatelessWidget {
         ),
         Positioned( top: -45.0, right: -30.0, child: circulos,),
         Container(
-          padding: EdgeInsets.only(top: 40.0),
+          padding: EdgeInsets.only(top: size.height * 0.05), /* ajustar top size.height * 0.04*/
           child: Column(
             children: <Widget>[
               Icon(Icons.person_pin_circle, color: Colors.white, size: 80.0,),
@@ -77,7 +77,7 @@ class LoginPage extends StatelessWidget {
           // Widget encargado de manejar el noch de los telefonos
           SafeArea(
             child: Container(
-              height: 180.0,
+              height: size.height * 0.20, /* 180.0 ajustar el height hace que el form se desplase hacia abajo*/
             ),
           ),
 
@@ -100,7 +100,7 @@ class LoginPage extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text('Ingreso', style: TextStyle(fontSize: 20.0),),
-                SizedBox( height: 60.0,),
+                SizedBox( height: 30.0,),
                 _crearEmail(),
                 SizedBox( height: 30.0,),
                 _crearPassword(),
