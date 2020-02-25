@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forms_crud_app/src/blocs/provider.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -13,7 +14,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  // Fondo Morado
+  /// Fondo Morado
   Widget _crearFondo(BuildContext context) {
 
     // Obtenemos el tamaño de la pantalla
@@ -70,6 +71,9 @@ class LoginPage extends StatelessWidget {
   Widget _loginForm(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
+    // instanciamos el Provider que dentro de el esta inicializado el loginBloc
+    final bloc = Provider.of(context);
+
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -101,11 +105,11 @@ class LoginPage extends StatelessWidget {
               children: <Widget>[
                 Text('Ingreso', style: TextStyle(fontSize: 20.0),),
                 SizedBox( height: 30.0,),
-                _crearEmail(),
+                _crearEmail(bloc),
                 SizedBox( height: 30.0,),
-                _crearPassword(),
+                _crearPassword(bloc),
                 SizedBox( height: 30.0,),
-                _crearBoton()
+                _crearBoton(bloc, context)
               ],
             ),
           ),
@@ -117,46 +121,97 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _crearEmail() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          icon: Icon(Icons.alternate_email, color: Colors.deepPurple,),
-          hintText: 'ejemplo@correo.com',
-          labelText: 'Correo electrónico'
-        ),
-      ),
+  Widget _crearEmail(LoginBloc bloc) {
+
+
+    return StreamBuilder(
+      stream: bloc.emailStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              icon: Icon(Icons.alternate_email, color: Colors.deepPurple,),
+              hintText: 'ejemplo@correo.com',
+              labelText: 'Correo electrónico',
+              counterText: snapshot.data,
+              errorText: snapshot.error
+            ),
+            textInputAction: TextInputAction.done,
+            onChanged: (String value) {
+              bloc.changeEmail(value);
+            },
+          ),
+        );
+      },
+    );
+
+  }
+
+  Widget _crearPassword(LoginBloc bloc) {
+
+    return StreamBuilder(
+      stream: bloc.passwordStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+              icon: Icon(Icons.lock_outline, color: Colors.deepPurple,),
+              labelText: 'Contraseña',
+              counterText: snapshot.data,
+              errorText: snapshot.error
+            ),
+            textInputAction: TextInputAction.done,
+            onChanged: (String value) {
+              bloc.changePassword(value);
+            },
+          ),
+
+        );
+      }
+    );
+
+  }
+
+  Widget _crearBoton(LoginBloc bloc, BuildContext context) {
+    return StreamBuilder(
+      stream: bloc.formValidStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return RaisedButton(
+          child: Container(
+            padding: EdgeInsets.symmetric( horizontal: 80.0, vertical: 15.0),
+            child: Text('Ingresar'),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          elevation: 0.0,
+          color: Colors.deepPurple,
+          textColor: Colors.white,
+          onPressed: snapshot.hasData ? () {
+            _login(bloc, context);
+          } : null,
+        );
+      }
     );
   }
 
-  Widget _crearPassword() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        obscureText: true,
-        decoration: InputDecoration(
-            icon: Icon(Icons.lock_outline, color: Colors.deepPurple,),
-            labelText: 'Contraseña'
-        ),
-      ),
-    );
-  }
+  /// el metodo [Navigator.pushNamed] hace que cuando navegemos a otra
+  /// pantalla aparesca en el appbar el boton de back que nos devolveria
+  /// al login
+  /// Para arreglar este comportamiento usaremos el metodo
+  /// [Navigator.pushReplacementNamed] que remplazara mi nueva ruta a home
+  /// y ya no aparesera el boton de back en el appbar
+  _login ( LoginBloc bloc, BuildContext context) {
+    print('===================');
+    print('Email: ${bloc.email}');
+    print('Password: ${bloc.password}');
+    print('===================');
 
-  Widget _crearBoton() {
-    return RaisedButton(
-      child: Container(
-        padding: EdgeInsets.symmetric( horizontal: 80.0, vertical: 15.0),
-        child: Text('Ingresar'),
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      elevation: 0.0,
-      color: Colors.deepPurple,
-      textColor: Colors.white,
-      onPressed: () {},
-    );
+    Navigator.pushReplacementNamed(context, 'home');
+    FocusScope.of(context).unfocus();
   }
 }
