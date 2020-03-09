@@ -1,14 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:forms_crud_app/src/blocs/provider.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+
+  FocusNode focusNodeEmail;
+  FocusNode focusNodePassword;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    focusNodeEmail = FocusNode();
+    focusNodePassword = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    focusNodeEmail.dispose();
+    focusNodePassword.dispose();
+
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
+    // instanciamos el Provider que dentro de el esta inicializado el loginBloc
+    final bloc = Provider.of(context);
+
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
           _crearFondo(context),
-          _loginForm(context),
+          _loginForm(context, bloc),
         ],
       )
     );
@@ -68,11 +101,11 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _loginForm(BuildContext context) {
+  Widget _loginForm(BuildContext context, LoginBloc bloc) {
     final size = MediaQuery.of(context).size;
 
     // instanciamos el Provider que dentro de el esta inicializado el loginBloc
-    final bloc = Provider.of(context);
+//    final bloc = Provider.of(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -138,6 +171,7 @@ class LoginPage extends StatelessWidget {
               counterText: snapshot.data,
               errorText: snapshot.error
             ),
+            focusNode: focusNodeEmail,
             textInputAction: TextInputAction.done,
             onChanged: (String value) {
               bloc.changeEmail(value);
@@ -164,6 +198,7 @@ class LoginPage extends StatelessWidget {
               counterText: snapshot.data,
               errorText: snapshot.error
             ),
+            focusNode: focusNodePassword,
             textInputAction: TextInputAction.done,
             onChanged: (String value) {
               bloc.changePassword(value);
@@ -211,7 +246,15 @@ class LoginPage extends StatelessWidget {
     print('Password: ${bloc.password}');
     print('===================');
 
+//    FocusScope.of(context).requestFocus(focusNodeEmail);
+//    FocusScope.of(context).requestFocus(focusNodePassword);
+//    FocusScopeNode currentFocus = FocusScope.of(context);
+//
+//    if (!currentFocus.hasPrimaryFocus) {
+//      currentFocus.unfocus();
+//    }
+
+
     Navigator.pushReplacementNamed(context, 'home');
-    FocusScope.of(context).unfocus();
   }
 }
