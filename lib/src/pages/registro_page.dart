@@ -3,14 +3,14 @@ import 'package:forms_crud_app/src/blocs/provider.dart';
 import 'package:forms_crud_app/src/providers/usuario_provider.dart';
 import 'package:forms_crud_app/src/utils/utils.dart' as utils;
 
-class LoginPage extends StatefulWidget {
+class RegistroPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegistroPageState createState() => _RegistroPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegistroPageState extends State<RegistroPage> {
 
-  final usuarioProvider = UsuarioProvider();
+  final usuarioProvider = new UsuarioProvider();
 
   FocusNode focusNodeEmail;
   FocusNode focusNodePassword;
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             child: Column(
               children: <Widget>[
-                Text('Ingreso', style: TextStyle(fontSize: 20.0),),
+                Text('Registro', style: TextStyle(fontSize: 20.0),),
                 SizedBox( height: 30.0,),
                 _crearEmail(bloc),
                 SizedBox( height: 30.0,),
@@ -152,8 +152,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
           SizedBox( height: 20.0,),
           FlatButton(
-            child: Text('Crear cuenta'),
-            onPressed: () => Navigator.pushReplacementNamed(context, 'registro'),
+            child: Text('Ya tienes cuenta?. Login'),
+            onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
           ),
           SizedBox( height: 100.0,)
         ],
@@ -225,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
         return RaisedButton(
           child: Container(
             padding: EdgeInsets.symmetric( horizontal: 80.0, vertical: 15.0),
-            child: Text('Ingresar'),
+            child: Text('Crear'),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0),
@@ -234,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
           color: Colors.deepPurple,
           textColor: Colors.white,
           onPressed: snapshot.hasData ? () {
-            _login(bloc, context);
+            _register(bloc, context);
           } : null,
         );
       }
@@ -247,19 +247,19 @@ class _LoginPageState extends State<LoginPage> {
   /// Para arreglar este comportamiento usaremos el metodo
   /// [Navigator.pushReplacementNamed] que remplazara mi nueva ruta a home
   /// y ya no aparesera el boton de back en el appbar
-  _login ( LoginBloc bloc, BuildContext context) async {
+  _register ( LoginBloc bloc, BuildContext context) async {
 
     /// Hide Keyboard
     FocusScope.of(context).unfocus();
 
-    Map info = await usuarioProvider.login(bloc.email.trim(), bloc.password);
+    final info = await usuarioProvider.nuevoUsuario(bloc.email.trim(), bloc.password);
+
 
     if (info['ok']) {
-      Navigator.pushReplacementNamed(context, 'home');
+      Navigator.pushReplacementNamed(context, 'login');
     } else {
       utils.mostrarAlerta(context, info['mensaje']);
     }
-
 
   }
 }
