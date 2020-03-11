@@ -1,6 +1,6 @@
 # Flutter App For Products
-<p><img src="./assets/original.png" align="left" height="400px" width="100px" ></p>
 
+<img src="./assets/original.png" height="300em" />
 
 A new Flutter application.
 
