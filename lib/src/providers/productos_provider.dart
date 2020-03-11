@@ -52,6 +52,9 @@ class ProductosProvider {
 
     if(decodedData == null) return [];
 
+    /// Aqui se valida si el token ya expiro y retornamos una lista vacia
+    if ( decodedData['error'] != null ) return [];
+
     decodedData.forEach((id, prod) {
       final prodTemp = ProductoModel.fromJson(prod);
       prodTemp.id = id;

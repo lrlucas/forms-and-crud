@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:forms_crud_app/src/blocs/productos_bloc.dart';
+import 'package:forms_crud_app/src/blocs/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:forms_crud_app/src/models/producto_model.dart';
-import 'package:forms_crud_app/src/pages/home_page.dart';
-import 'package:forms_crud_app/src/providers/productos_provider.dart';
+//import 'package:forms_crud_app/src/pages/home_page.dart';
+//import 'package:forms_crud_app/src/providers/productos_provider.dart';
 import 'package:forms_crud_app/src/utils/utils.dart' as utils;
 
 class ProductoPage extends StatefulWidget {
@@ -26,15 +28,18 @@ class _ProductoPageState extends State<ProductoPage> {
   /// Variable para guardar la foto que devuelve la libreria
   File foto;
 
+  ProductosBloc productosBloc;
   /// Creamos la instancia de nuestro modelo
   ProductoModel producto = new ProductoModel();
   bool _guardando = false;
 
   /// Provider Producto
-  final productoProvider = ProductosProvider();
+  //final productoProvider = ProductosProvider();
 
   @override
   Widget build(BuildContext context) {
+
+    productosBloc = Provider.productosBloc(context);
 
     final ProductoModel prodData = ModalRoute.of(context).settings.arguments;
 
@@ -161,15 +166,15 @@ class _ProductoPageState extends State<ProductoPage> {
 
     /// Subir imagen
     if (foto != null) {
-      producto.fotoUrl = await productoProvider.subirImage(foto);
+      producto.fotoUrl = await productosBloc.subirFoto(foto);
     }
 
 
 
     if (producto.id == null) {
-      productoProvider.crearProducto(producto);
+      productosBloc.agregarProducto(producto);
     } else {
-      productoProvider.editarProducto(producto);
+      productosBloc.editarProducto(producto);
     }
 
     /// Hide Keyboard
@@ -218,6 +223,7 @@ class _ProductoPageState extends State<ProductoPage> {
     }
   }
 
+  /// No funciona como se espera 10/03/2020
   /// Optimizacion de la imagenes para subir a cloudinary
   /// se especifica que sea maximo de 1000 x 1000 las fotos he imagenes
   _selecionarFoto(ImageSource source) async {
