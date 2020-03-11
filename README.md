@@ -1,9 +1,15 @@
 # Flutter App For Products
 
+## Capturas
 <img src="./assets/screen1.jpg" height="500em"/> <img src="./assets/screen2.jpg" height="500em"/>
 <img src="./assets/screen3.jpg" height="500em"/> <img src="./assets/screen4.jpg" height="500em"/>
 
-A new Flutter application.
+Tiene 4 pantallas:
+- List of Products: que muestra todos los productos.
+- Create Producto: Crear un producto, se puede subir una imagen o tomar
+un foto con la camara del telefono.
+- Login: Logeo con Firebase Auth.
+- Registro: Crear una cuenta con email y password con Firebase.
 
 ## Getting Started
 
