@@ -26,6 +26,7 @@ class HomePage extends StatelessWidget {
       ),
       body: _crearListadoProductos(productosBloc),
       floatingActionButton: _crearBoton(context),
+//      bottomNavigationBar: _crearBotonNatigation(context),
     );
   }
 
@@ -93,6 +94,23 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _crearBotonNatigation(BuildContext context) {
+    return BottomNavigationBar(
+      currentIndex: 0,
+      backgroundColor: Theme.of(context).primaryColor,
+      items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home, color: Colors.white,),
+          title: Text('home', style: TextStyle(color: Colors.white),),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home, color: Colors.white),
+          title: Text('Create', style: TextStyle(color: Colors.white),),
+        ),
+      ],
     );
   }
 

@@ -30,10 +30,10 @@ class MyApp extends StatelessWidget {
         title: 'TITLE',
         initialRoute: 'login',
         routes: {
-          'login' : (BuildContext context) => LoginPage(),
-          'registro' : (BuildContext context) => RegistroPage(),
-          'home' : (BuildContext context) => HomePage(),
-          'producto' : (BuildContext context) => ProductoPage()
+          'login'     : (BuildContext context) => LoginPage(),
+          'registro'  : (BuildContext context) => RegistroPage(),
+          'home'      : (BuildContext context) => HomePage(),
+          'producto'  : (BuildContext context) => ProductoPage()
         },
         theme: ThemeData(
           primaryColor: Color(0xff673AB7),
